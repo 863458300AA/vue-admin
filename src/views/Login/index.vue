@@ -2,14 +2,14 @@
 	<div class="login">
 	  <div class="login_wrap">
 		  <ul @click="change" class="menu_tab">
-		  	<li data-index="0" :class="{current:0 == currentIndex}">登录</li>
-		  	<li data-index="1" :class="{current:1 == currentIndex}">注册</li>
+		  	<li  data-index="0" :class="{current:0 == currentIndex}">登录</li>
+		  	<li  data-index="1" :class="{current:1 == currentIndex}">注册</li>
 		  </ul>
 			<el-form size="medium" :model="ruleForm" status-icon :rules="rules" ref="ruleForm" class="login-form">
 			  
-				<el-form-item  prop="userName" class="from-item">
+				<el-form-item  prop="username" class="from-item">
 					<label for="">邮箱</label>
-			    <el-input type="text" v-model="ruleForm.userName" autocomplete="off" clearable ></el-input>
+			    <el-input type="text" v-model="ruleForm.username" autocomplete="off" clearable ></el-input>
 			  </el-form-item>
 			  
 				<el-form-item  prop="password" class="from-item">
@@ -26,40 +26,55 @@
 					<label for="">验证码</label>
 					<el-row :gutter="11">
 					  <el-col :span="15" ><el-input mixlength="6" maxlength="6" v-model="ruleForm.code" clearable></el-input></el-col>
-					  <el-col :span="9" ><el-button class="block" type="success">获取验证码</el-button></el-col>
+					  <el-col :span="9" >
+							<el-button 
+								@click="getmess()" class="block" type="success" 
+								v-text="codeStatus.text" :disabled="codeStatus.status"></el-button>
+						</el-col>
 					</el-row>
 			  </el-form-item>
 			  
 				<el-form-item>
-			    <el-button class="block margin-top-19" type="danger" @click="submitForm('ruleForm')">提交</el-button>
+			    <el-button 
+					 class="block margin-top-19" 
+					 type="danger" 
+					 :disabled="submitBtnStatus"
+					 @click="submitForm('ruleForm')" 
+					 v-text="currentIndex === '1'? '注册':'登录'"></el-button>
 			  </el-form-item>
 			</el-form>
-			</div>
-	  </div>
+		</div>
 	</div>
 </template>
 
 <script>
+	import {getSms,Register,Login} from '../../api/login.js'
 	import {stripscript,regUserName,regCode,regPassword} from '@/ulits/validate.js'
+	import sha1 from 'js-sha1'
 	export default{
-			data(){
+		name:'login',
+		data(){
 				//验证邮箱
 				var validateUserName = (rule, value, callback) => {
 				  if (value === '') {
 				  callback(new Error('请输入用户名'));
 				  } else if(!regUserName(value)){
+						console.log(value)
+							this.userNameStatus = false
 							callback(new Error('用户名格式有误'));
 					} else {
-							callback(); //true
+							this.userNameStatus = true;
+							callback();
+							 //true
 					}
 				};
 				//验证密码
 				var validatePassWord = (rule, value, callback) => {
 				  if (value === '') {
 				    callback(new Error('请输入密码'));
-				  } else if(this.currentIndex){
+				  } else if(this.currentIndex === '1'){
 						if (!regPassword(value)) {
-						  callback(new Error('密码位6-20位数字或密码组成'));
+						  callback(new Error('密码由6-20位数字或密码组成'));
 						} else {
 						  callback();
 						}
@@ -68,9 +83,9 @@
 					}
 					
 				};
-				//当用户选择注册时,要重复输入密码
+				//当用户选择注册时,要重复输入密码;选择登录时,直接使这项的验证为TRUE
 				var validateAgainPassWord = (rule, value, callback) => {
-					if(!this.currentIndex){
+					if(this.currentIndex === '0'){
 						callback();
 						return
 					}
@@ -94,15 +109,22 @@
 					}
 				};
 				return{
-					currentIndex:0,
+					currentIndex:'0',
+					userNameStatus:false,
+					codeStatus:{
+						status:false,
+						text:'发送验证码'
+					},
+					submitBtnStatus:true,
+					timer:null,
 					ruleForm: {
-						userName: '',
+						username: '',
 						password: '',
 						againPassword:'',
 						code: ''
 					},
 					rules: {
-						userName: [
+						username: [
 							{ validator:validateUserName, trigger: 'blur' }
 						],
 						password: [
@@ -120,24 +142,106 @@
 		methods:{
 			change(e){
 				let {index} = e.target.dataset;
+				console.log(index)
 				this.currentIndex = index;
-				this.ruleForm = {
-						userName: '',
-						password: '',
-						againPassword:'',
-						code: ''
-					}
+				this.resetCode()
 			},
+			//进行验证码的重置
+			resetCode(){
+				this.codeStatus.status = false;
+				this.codeStatus.text = '获取验证码';
+				clearInterval(this.timer);
+				this.$refs['ruleForm'].resetFields();
+			},
+			
+			//注册提交
+			registerSubmit(username,password,code){
+				Register({
+					username,
+					password:sha1(password),
+					code
+				}).then(res=>{
+					this.currentIndex = '0';
+					this.resetCode()
+				}).catch(err=>{
+					console.log(err);
+				})
+			},
+			
+			//登陆提交
+			loginSubmit(username,password,code){
+				Login({
+					username,
+					password:sha1(password),
+					code
+				}).then(res=>{
+					this.$router.push({
+						name:'/layout'
+					})
+				}).	catch(err=>{
+					console.log(err	);
+				})
+			},
+			//进行提交
 			submitForm(formName) {
+				console.log(this.currentIndex)
 			  this.$refs[formName].validate((valid) => {
 			    if (valid) {
-			      alert('submit!');
+						let {username,password,code} = this.ruleForm;
+						this.currentIndex === '0'? this.loginSubmit(username,password,code):this.registerSubmit(username,password,code);
 			    } else {
 			      console.log('error submit!!');
 			      return false;
-			    }
+						}
 			    });
+			},
+			//验证码倒计时函数
+			countDown(){
+				let time = 60;
+				this.timer = setInterval(()=>{
+					time--;
+					if(!time){
+						this.codeStatus.status = false;
+						this.codeStatus.text = '再次获取';
+						clearInterval(this.timer);
+					}else{
+						this.codeStatus.text = time + 's';
+					}
+				},1000)
+			},
+			//获取验证码
+			getmess(){
+				let {username} = this.ruleForm;
+				let module = this.currentIndex == '0'? 'login':'register';
+				console.log(module);
+				if(!username){
+					 this.$message({
+					  message: '用户名不能为空哦~',
+					  type: 'error',
+						duration:1500
+					});
+					return;
+				}
+				if(!this.userNameStatus){
+				
+					return;
+				}
+				//对应的提交按钮变为可点击
+				this.submitBtnStatus = false;
+				this.codeStatus.status = true;
+				this.codeStatus.text = '发送中';
+				getSms({
+					username:this.ruleForm.username,
+					module
+				}).then(res=>{
+					this.countDown()
+				}).catch(err=>{
+					console.log(err)
+				})
 			}
+		},
+		mounted(){
+			console.log(process.env.VUE_APP_ABC)
 		}
 	}
 </script>
