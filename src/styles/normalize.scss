@@ -22,7 +22,6 @@
  time, mark, audio, video {
    margin: 0;
    padding: 0;
-   border: 0;
    font-size: 100%;
    font: inherit;
    vertical-align: baseline;
@@ -47,6 +46,7 @@
   
   body {
     margin: 0;
+		font-size: 15px;
   }
   
   /**
@@ -370,3 +370,16 @@
   }
 
   ul, li { list-style: none; }
+	
+	/*浮动*/
+	.fl{
+		float: left;
+	}
+	.fr{
+		float: right;
+	}
+	.clearfix::after{
+		content: "";
+		display: block;
+		clear: both;
+	}

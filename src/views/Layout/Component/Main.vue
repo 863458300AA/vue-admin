@@ -1,6 +1,8 @@
 <template>
 	<div id="Main_wrap">
-		<router-view></router-view>
+		<div class="content">
+			<router-view></router-view>
+		</div>
 	</div>
 </template>
 
@@ -18,5 +20,8 @@
 		height: 100%;
 		border-bottom: 0;
 		background-color: #fff;
+	}
+	.content{
+		padding: 30px 30px 0 30px;
 	}
 </style>

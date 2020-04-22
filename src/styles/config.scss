@@ -3,3 +3,27 @@ $navMenu:250px;
 //主颜色
 $mainColor:#f56c6c;
 
+//兼容函数
+@mixin webkit($type,$value){
+	-webkit-#{$type}: $value;
+	-moz-#{$type}: $value;
+	-ms-#{$type}: $value;
+	-o-#{$type}: $value;
+	#{$type}: $value;
+}
+
+//信息列表
+@mixin labelDom ($align,$width,$line-height:"normal"){
+		label{
+			float: left;
+			line-height:$line-height;
+			width: $width;
+			text-align: $align;
+		}
+		.content{
+			margin-left: $width;
+			.el-select{
+				width:100%;
+			}
+		}
+}

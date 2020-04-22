@@ -35,7 +35,7 @@ module.exports = {
     sourceMap: false,
     // css预设器配置项
     loaderOptions: {
-      sass: { 
+      scss: { 
         prependData: `@import "./src/styles/main.scss";`
       }
     },
@@ -62,7 +62,7 @@ module.exports = {
     // 设置代理proxy
     proxy: {
       '/api':{
-        target:'http://www.web-jshtml.cn/productapi', //服务器地址
+        target:'http://www.web-jshtml.cn/productapi/token', //服务器地址
 				changeOrigin:true,    //表示是否跨域，
 				pathRewrite:{           //表示需要rewrite重写的
 					'^/api':''

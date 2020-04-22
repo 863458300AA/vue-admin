@@ -1,7 +1,10 @@
 <template>
 	<div id="nav_wrap">
+		<div class="img" :class="{close:isCollapse}">
+			<img src="../../../assets/vue_03.png" alt="">
+		</div>
 		<el-menu default-active="1-4-1" class="el-menu-vertical-demo" 
-		@open="handleOpen" @close="handleClose" 
+		:collapse="isCollapse"
 	  background-color="transparent" router
 		text-color="#fff" active-text-color="#fff">
 			<template v-for="(item,index) of routers">
@@ -16,7 +19,6 @@
 				</el-submenu>
 			</template>
 		</el-menu>
-		<div @click="test()">{{count}}</div>
 	</div>
 </template>
 
@@ -26,30 +28,18 @@
 		data(){
 			return{
 				routers:[],
-				a:10
-			}
-		},
-		methods:{
-			handleOpen(key, keyPath) {
-			  console.log(key, keyPath);
-			},
-			handleClose(key, keyPath) {
-			  console.log(key, keyPath);
-		  },
-			test(){
-				console.log(1)
-				this.a+=10;
 			}
 		},
 		computed:{
-			count(){
-				console.log(2)
-				return this.a*10
+			isCollapse(){
+				return this.$store.state.app.isCollapse
 			}
+		},
+		methods:{
+			
 		},
 		mounted(){
 			this.routers = this.$router.options.routes;
-			console.log(this.routers)
 		}
 }
 </script>
@@ -57,9 +47,25 @@
 <style lang="scss" scoped>
 	@import '../../../styles/config.scss';
 	#nav_wrap{
-		// position: fixed;
 		height: 100vh;
 		// width: 250px;
 		background-color: #344a5f;
+	}
+	.img{
+		position: absolute;
+		padding-top: 40px;
+		left: $navMenu/2 - 45;
+		@include webkit(transition,all .3s ease 0s)
+		img{
+			width: 90px;
+			height: 80px;
+		}
+	&.close{
+		left: 0;
+		margin-left: 0;
+	}
+	}
+	.el-menu-vertical-demo{
+		padding-top: 140px;
 	}
 </style>

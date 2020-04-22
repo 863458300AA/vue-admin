@@ -59,7 +59,6 @@
 				  if (value === '') {
 				  callback(new Error('请输入用户名'));
 				  } else if(!regUserName(value)){
-						console.log(value)
 							this.userNameStatus = false
 							callback(new Error('用户名格式有误'));
 					} else {
@@ -89,7 +88,6 @@
 						callback();
 						return
 					}
-					console.log(1)
 				  if (value === '') {
 				    callback(new Error('请再次输入密码'));
 				  } else if (value !== this.ruleForm.password) {
@@ -142,7 +140,6 @@
 		methods:{
 			change(e){
 				let {index} = e.target.dataset;
-				console.log(index)
 				this.currentIndex = index;
 				this.resetCode()
 			},
@@ -170,15 +167,15 @@
 			
 			//登陆提交
 			loginSubmit(username,password,code){
-				Login({
+				this.$store.dispatch('app/login',{
 					username,
 					password:sha1(password),
 					code
 				}).then(res=>{
 					this.$router.push({
-						name:'/layout'
+						name:'Console'
 					})
-				}).	catch(err=>{
+				}).catch(err=>{
 					console.log(err	);
 				})
 			},
@@ -190,7 +187,6 @@
 						let {username,password,code} = this.ruleForm;
 						this.currentIndex === '0'? this.loginSubmit(username,password,code):this.registerSubmit(username,password,code);
 			    } else {
-			      console.log('error submit!!');
 			      return false;
 						}
 			    });
@@ -213,7 +209,6 @@
 			getmess(){
 				let {username} = this.ruleForm;
 				let module = this.currentIndex == '0'? 'login':'register';
-				console.log(module);
 				if(!username){
 					 this.$message({
 					  message: '用户名不能为空哦~',
@@ -236,12 +231,10 @@
 				}).then(res=>{
 					this.countDown()
 				}).catch(err=>{
-					console.log(err)
 				})
 			}
 		},
 		mounted(){
-			console.log(process.env.VUE_APP_ABC)
 		}
 	}
 </script>
