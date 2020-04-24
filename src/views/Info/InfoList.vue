@@ -58,7 +58,7 @@
 		    :data="tableData" @selection-change="checkBox"
 		    border  v-loading="loadingTable"
 		    style="width: 100%;margin:30px 0;">
-				<el-table-column type="selection" width="55"></el-table-column>
+				<el-table-column type="selection" width="75"></el-table-column>
 		    <el-table-column prop="title" label="标题" width="730px"></el-table-column>
 		    <el-table-column prop="categoryId" label="类别" width="130px" :formatter="initCartgoryId"></el-table-column>
 		    <el-table-column prop="createDate" label="日期" width="230px" :formatter="initDate"></el-table-column>
