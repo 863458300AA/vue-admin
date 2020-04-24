@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { Message } from 'element-ui'
 import {getToken,getUsername} from '@/ulits/cookieSetting.js'
-//创建axios,赋值给service
+//创建axios,赋值给serviceing
 
 //判断师生环境还是开发环境
 const BASEURL = process.env.NODE_ENV === 'production' ? '' : '/api';
