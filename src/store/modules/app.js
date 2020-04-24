@@ -12,18 +12,15 @@ const getters = {
 }
 const	mutations = {
 	SET_COLLAPSE(state){
-		console.log('app')
 		state.isCollapse = !state.isCollapse;
 		//html5 本地储存
 		sessionStorage.setItem('isCollapse',JSON.stringify(state.isCollapse));
 	},
 	SET_TOKEN(state,token){
 		state.token = token;
-		console.log(state.token)
 	},
 	SET_USERNAME(state,username){
 		state.username = username;
-		console.log(state.username)
 	}
 };
 		
@@ -32,7 +29,6 @@ const	actions = {
 	  return new Promise((resolve,reject)=>{
 			Login(requestData).then(res=>{
 				resolve(res)
-				console.log(res)
 				let {token,username} = res.data.data;
 				//把相关的值通过mutation对象存进vuex中
 				

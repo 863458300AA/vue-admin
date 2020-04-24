@@ -1,7 +1,11 @@
 import axios from 'axios'
 import { Message } from 'element-ui'
+import {getToken,getUsername} from '@/ulits/cookieSetting.js'
 //创建axios,赋值给service
+
+//判断师生环境还是开发环境
 const BASEURL = process.env.NODE_ENV === 'production' ? '' : '/api';
+
 const service = axios.create({
 	baseURL:BASEURL, //进行了这些操作之后 http://localhost:8080/api => http://www.web-jshtml.cn/productApi
 	timeout:10000
@@ -15,9 +19,13 @@ const service = axios.create({
 		 userId
 		  
 */
-// service.interceptors.request.use(config=>{
-	
-// });
+service.interceptors.request.use(config=>{
+	config.headers['Tokey'] = getToken();
+	config.headers['UserName'] = getUsername();
+	return config
+},function(err){
+	return Promise.reject(err)
+})
 
 //添加响应拦截器
 service.interceptors.response.use((res)=>{
@@ -30,7 +38,7 @@ service.interceptors.response.use((res)=>{
 		})
 		return Promise.reject(data)
 	}else{
-		Message.success(data.message)
+		if(data.message !== 'OK') Message.success(data.message);
 		return res;
 	}
 })
