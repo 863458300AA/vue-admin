@@ -64,7 +64,9 @@
 			openParent(){
 				this.parentDisabled = false;
 				this.showAddParent = true;
+				this.showAddChild = false;
 				this.onsubmitText = '添加';
+				this.form.childCategory = '';
 			},
 			
 			//编辑一级分类
@@ -222,10 +224,11 @@
 				this.loading = false;
 				this.form[Category] = '';
 			},
-			
 		},
-		created(){
-			this.axiosGetCategory()
+		created() {
+			infoCategory().then(res=>{
+				this.category = res.data.data
+			})
 		}
 	}
 </script>

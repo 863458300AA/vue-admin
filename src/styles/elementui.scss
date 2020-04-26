@@ -86,3 +86,54 @@
 		margin-bottom: 24px;
 	}
 }
+
+/* editDetail 页面样式*/
+#editDetail{
+	.el-form-item {
+		margin-bottom: 30px;
+		.el-form-item__content .el-input__inner{
+			width: 170px;
+			height: 40px;
+		}
+		.el-form-item__label{
+			text-align: left;
+			padding-right: 20px;
+		}
+	}
+	.newsTitle{
+		.el-form-item__content .el-input__inner{
+			width: 370px;
+		}
+	}
+	.editDate{
+		.el-form-item__content .el-input__inner{
+			width: 220px;
+		}
+	}
+}
+//图片上传组件样式
+.uploadImg{
+		.avatar-uploader .el-upload {
+		    border: 1px dashed #d9d9d9;
+		    border-radius: 6px;
+		    cursor: pointer;
+		    position: relative;
+		    overflow: hidden;
+		  }
+		  .avatar-uploader .el-upload:hover {
+		    border-color: #409EFF;
+		  }
+		  .avatar-uploader-icon {
+		    font-size: 28px;
+		    color: #8c939d;
+		    width: 178px;
+		    height: 178px;
+		    line-height: 178px;
+		    text-align: center;
+		  }
+		  .avatar {
+		    width: 178px;
+		    height: 178px;
+		    display: block;
+		  }
+	}

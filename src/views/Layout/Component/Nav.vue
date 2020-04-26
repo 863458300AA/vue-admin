@@ -15,7 +15,7 @@
 				    <span slot="title">{{item.meta.name}}</span>
 				  </template>
 					<!-- 子菜单 -->
-				   <el-menu-item v-for="(subItem,index) of item.children" :key="index" :index="subItem.path">{{subItem.meta.name}}</el-menu-item>
+				   <el-menu-item v-if="!subItem.hidden" v-for="(subItem,index) of item.children" :key="index" :index="subItem.path">{{subItem.meta.name}}</el-menu-item>
 				</el-submenu>
 			</template>
 		</el-menu>

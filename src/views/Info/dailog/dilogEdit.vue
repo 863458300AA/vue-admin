@@ -90,7 +90,7 @@
 				this.loading = false;
 				this.$refs['form'].resetFields();
 			},
-			//增加信息
+			//提交信息
 			add_edit(){
 				this.loading = true;
 				let {category,title,content} = this.infoform;

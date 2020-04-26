@@ -59,7 +59,7 @@
 		    border  v-loading="loadingTable"
 		    style="width: 100%;margin:30px 0;">
 				<el-table-column type="selection" width="55"></el-table-column>
-		    <el-table-column prop="title" label="标题" width="830px"></el-table-column>
+		    <el-table-column prop="title" label="标题" width="730px"></el-table-column>
 		    <el-table-column prop="categoryId" label="类别" width="130px" :formatter="initCartgoryId"></el-table-column>
 		    <el-table-column prop="createDate" label="日期" width="230px" :formatter="initDate"></el-table-column>
 				<el-table-column prop="manager" label="管理人" width="115px"></el-table-column>
@@ -67,7 +67,8 @@
 					<template slot-scope="scope">
 					  <el-button size="mini" type="danger" @click="deleteInfo(scope.row.id)">删除</el-button>
 					  <el-button size="mini" type="success" @click="$isDialog('编辑',scope.row)">编辑</el-button>
-				  </template>
+						<el-button size="mini" type="success" @click="editDetail(scope.row)">编辑详情</el-button>
+					</template>
 				</el-table-column>
 		  </el-table>
 			<!-- 分页 -->
@@ -119,7 +120,6 @@
 			getInfoCategory(){
 				infoCategory().then(res=>{
 					this.InfoCategory = res.data.data;
-					console.log(this.InfoCategory)
 				}).catch(err=>{
 					console.log(err);
 				})
@@ -152,7 +152,6 @@
 				}).then(res=>{
 					this.tableData = res.data.data.data;
 					this.total = res.data.data.total;
-					console.log(this.tableData)
 					this.loadingTable = false;
 				}).catch()
 			},
@@ -212,10 +211,36 @@
 				// let categoryName = this.InfoCategory[index].category_name
 				//console.log(categoryName)
 				return categoryName
+			},
+			
+			/* 跳转到详情页 */
+			editDetail(param){
+				let {id,title} = param;
+				this.$router.push({
+					name:'EditDetail',
+					params:{
+						id,
+						title
+					}
+				})
+				let data = {
+					id:{
+						value:id,
+						sessionKey:'infoId',
+						isSession:true
+					},
+					title:{
+						value:title,
+						sessionKey:'infoTitle',
+						isSession:true
+					},
+				}
+				this.$store.commit('infoParams/SET_INFODETAIL',data)
 			}
 		},
 		created(){
-			this.getInfoCategory();this.getInfoList()
+			this.getInfoList();
+			this.getInfoCategory();
 		}
 	}
 </script>
@@ -226,5 +251,8 @@
 			&.category{@include labelDom (left,60px,40px)}
 			&.date{@include labelDom (right,93px,40px)}
 			&.keyword{@include labelDom (right,99px,40px)}
+		}
+		a{
+			padding-left: 10px;
 		}
 </style>
