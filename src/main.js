@@ -6,10 +6,12 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import './router/routeGuard.js'
 import tipsBox from '@/ulits/globalFun.js'
+import uploadImg from './components/uploadImg.vue'
 
 //全局注册
 Vue.use(ElementUI)
 Vue.use(tipsBox)
+Vue.component('uploadImg', uploadImg)
 Vue.config.productionTip = false
 
 console.log(Vue.prototype)

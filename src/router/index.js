@@ -84,7 +84,7 @@ Vue.use(Router)
 			},
 			{
 				path: '/infoCategory',
-				name: '/InfoCategory',
+				name: 'InfoCategory',
 				meta:{
 					name:'信息分类'
 				},
@@ -92,6 +92,18 @@ Vue.use(Router)
 				// this generates a separate chunk (about.[hash].js) for this route
 				// which is lazy-loaded when the route is visited.
 				component: () => import('../views/Info/InfoCategory.vue'),
+			},
+			{
+				path: '/editDetail',
+				name: 'EditDetail',
+				hidden:true,
+				meta:{
+					name:'信息详情'
+				},
+				// route level code-splitting
+				// this generates a separate chunk (about.[hash].js) for this route
+				// which is lazy-loaded when the route is visited.
+				component: () => import('../views/Info/editDetail.vue'),
 			}
 		]
 	},
