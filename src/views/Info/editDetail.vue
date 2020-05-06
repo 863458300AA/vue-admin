@@ -94,7 +94,7 @@
 				})
 			}
 		},
-		created(){
+		activated(){
 			/* 获取id,title */
 			let {id,title} = this.$store.state.infoParams;
 			this.info.id = this.$route.params.id || id;
@@ -103,6 +103,11 @@
 			infoCategory().then(res=>{this.InfoCategory = res.data.data})
 			/* 获取信息详情 */
 			this.axiosGetInfo()				
+		},
+		deactivated() {
+			for(var key in this.infoForm){
+				this.infoForm[key] = ''
+			}
 		}
 	}
 </script>

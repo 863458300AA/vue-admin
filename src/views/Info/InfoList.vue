@@ -10,7 +10,6 @@
 								:key="item.id" :label="item.category_name" 
 								:value="item.id" 
 								></el-option>
-								
 							</el-select>
 						</div>
 					</div>
@@ -50,7 +49,7 @@
 					<el-button style="width:100%;height: 40px;" type="danger" @click="searchInfo">搜索</el-button>
 				</el-col>
 				<el-col :span="4" style="text-align: right;">
-					<el-button style="width:50%;height: 40px;" type="danger" @click="$isDialog('新增')">新增</el-button>
+					<el-button style="width:50%;height: 40px;" type="danger" v-if="btnPremi('info:add')" @click="$isDialog('新增')">新增</el-button>
 				</el-col>
 			</el-row>
 		<!-- 表格 -->
@@ -65,15 +64,15 @@
 				<el-table-column prop="manager" label="管理人" width="115px"></el-table-column>
 				<el-table-column  label="操作">
 					<template slot-scope="scope">
-					  <el-button size="mini" type="danger" @click="deleteInfo(scope.row.id)">删除</el-button>
-					  <el-button size="mini" type="success" @click="$isDialog('编辑',scope.row)">编辑</el-button>
-						<el-button size="mini" type="success" @click="editDetail(scope.row)">编辑详情</el-button>
+					  <el-button size="mini" type="danger" @click="deleteInfo(scope.row.id)" v-if="btnPremi('info:del')">删除</el-button>
+					  <el-button size="mini" type="success" @click="$isDialog('编辑',scope.row)" v-if="btnPremi('info:edit')">编辑</el-button>
+						<el-button size="mini" type="success" @click="editDetail(scope.row)" v-if="btnPremi('info:detailed')">编辑详情</el-button>
 					</template>
 				</el-table-column>
 		  </el-table>
 			<!-- 分页 -->
 			<el-row >
-				<el-col :span="12" ><el-button @click="deleteMore" size="medium">批量删除</el-button></el-col>
+				<el-col :span="12" ><el-button @click="deleteMore" size="medium" v-if="btnPremi('info:batchDel')">批量删除</el-button></el-col>
 				<el-col :span="12" style="padding-top:5px;">
 					<el-pagination
 						style="text-align:right;"
@@ -204,13 +203,14 @@
 			initDate(row){
 				return timestampToTime(row.createDate);
 			},
-			// //table的categoryId转categoryName
+			//table的categoryId转categoryName
 			initCartgoryId(row){
-				let categoryName = this.InfoCategory.filter(item=>item.id == row.categoryId)[0].category_name;
+				let categoryName = this.InfoCategory.filter(item=>item.id == row.categoryId)[0];
 				// let index = this.InfoCategory.findIndex(item=>item.id	 == row.categoryId);
 				// let categoryName = this.InfoCategory[index].category_name
 				//console.log(categoryName)
-				return categoryName
+				if(!categoryName) return false;
+				return categoryName.category_name
 			},
 			
 			/* 跳转到详情页 */
@@ -238,9 +238,18 @@
 				this.$store.commit('infoParams/SET_INFODETAIL',data)
 			}
 		},
+		beforeRouteEnter(to,from,next) {
+			if(from.path === "/infoCategory"){
+				to.meta.keepAlive = false
+			}else{
+				to.meta.keepAlive = true
+			}
+			next();
+		},
 		created(){
-			this.getInfoList();
+			console.log('create')
 			this.getInfoCategory();
+			this.getInfoList();
 		}
 	}
 </script>

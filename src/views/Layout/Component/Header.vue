@@ -10,6 +10,7 @@
 </template>
 
 <script>
+	import {LogOut} from '@/api/login.js'
 	export default{
 		name:"LayoutHeader",
 		computed:{
@@ -28,7 +29,9 @@
 				  cancelButtonText: '取消',
 				  center: true
 				}).then(() => {
-				    this.$router.push('/login')
+						LogOut().then(res=>{
+							this.$router.push('/login')
+						}).catch()
 				  }).catch(() => {
 							return
 				})

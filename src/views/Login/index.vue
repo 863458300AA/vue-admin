@@ -1,5 +1,5 @@
 <template>
-	<div class="login">
+	<div class="login" style="padding-top: 150px;">
 	  <div class="login_wrap">
 		  <ul @click="change" class="menu_tab">
 		  	<li  data-index="0" :class="{current:0 == currentIndex}">登录</li>
@@ -49,11 +49,12 @@
 
 <script>
 	import {getSms,Register,Login} from '../../api/login.js'
-	import {stripscript,regUserName,regCode,regPassword} from '@/ulits/validate.js'
+	import {stripscript,regUserName,regCode,regPassword} from '@/ulits/regLogin.js'
 	import sha1 from 'js-sha1'
 	export default{
 		name:'login',
 		data(){
+				
 				//验证邮箱
 				var validateUserName = (rule, value, callback) => {
 				  if (value === '') {
@@ -80,7 +81,6 @@
 					}else{
 						callback();
 					}
-					
 				};
 				//当用户选择注册时,要重复输入密码;选择登录时,直接使这项的验证为TRUE
 				var validateAgainPassWord = (rule, value, callback) => {
@@ -218,7 +218,6 @@
 					return;
 				}
 				if(!this.userNameStatus){
-				
 					return;
 				}
 				//对应的提交按钮变为可点击
@@ -231,10 +230,15 @@
 				}).then(res=>{
 					this.countDown()
 				}).catch(err=>{
+					this.codeStatus.status = false;
+					this.codeStatus.text = '再次获取';
 				})
 			}
 		},
 		mounted(){
+		},
+		destroyed() {
+			clearInterval(this.timer)
 		}
 	}
 </script>

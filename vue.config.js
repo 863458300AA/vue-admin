@@ -51,6 +51,7 @@ module.exports = {
    */
   pwa: {},
   // webpack-dev-server 相关配置
+	//只在开发环境中执行
   devServer: {
     open: false, // 编译完成是否打开网页
     host: '0.0.0.0', // 指定使用地址，默认localhost,0.0.0.0代表可以被外界访问
@@ -61,11 +62,11 @@ module.exports = {
 		proxy:null,
     // 设置代理proxy
     proxy: {
-      '/api':{
+      [process.env.VUE_APP_API]:{
         target:'http://www.web-jshtml.cn/productapi/token', //服务器地址
 				changeOrigin:true,    //表示是否跨域，
 				pathRewrite:{           //表示需要rewrite重写的
-					'^/api':''
+					['^' + process.env.VUE_APP_API]:''
         }
       }
 		},

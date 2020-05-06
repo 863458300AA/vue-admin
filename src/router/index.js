@@ -3,30 +3,29 @@ import Router from 'vue-router'
 const Layout = () => import('../views/Layout/index.vue')
 Vue.use(Router)
 
-  const routes = [
-  {
-    path: '/',
+export const defaultRoutes = [
+	{
+	  path: '/',
 		redirect:'login',
 		meta:{
 			name:'主页'
 		}
-  },
-  {
-    path: '/login',
-    name: 'Login',
+	},
+	{
+	  path: '/login',
+	  name: 'Login',
 		meta:{
 			name:'登录'
 		},
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: ()=>import ('../views/Login/index.vue')
-  },
+	  // route level code-splitting
+	  // this generates a separate chunk (about.[hash].js) for this route
+	  // which is lazy-loaded when the route is visited.
+	  component: ()=>import ('../views/Login/index.vue')
+	},
 	
 	/*
 	 控制台选项 
 	 */
-	
 	{
 	  path: '/console',
 	  name: 'Console',
@@ -54,7 +53,29 @@ Vue.use(Router)
 			},
 		]
 	},
-	
+	//404页面
+	{
+	  path: '/page404',
+	  name: '404',
+		meta:{
+			name:'404',
+		},
+	  component: Layout,
+		children:[
+			{
+				path: '/404',
+				meta:{
+					name:'404'
+				},
+				// route level code-splitting
+				// this generates a separate chunk (about.[hash].js) for this route
+				// which is lazy-loaded when the route is visited.
+				component: () => import('../views/404.vue'),
+			},
+		]
+	}
+]
+export const activeRoutes = [
 	/* 
 	信息管理选项 
 	*/
@@ -63,6 +84,7 @@ Vue.use(Router)
 	  name: 'Info',
 		hidden:true,
 		meta:{
+			system:'infoSystem',
 			name:'信息管理',
 			icon:'icon-xinxiguanli'
 		},
@@ -75,6 +97,7 @@ Vue.use(Router)
 				path: '/infoList',
 				name: 'InfoList',
 				meta:{
+					keepAlive:true,
 					name:'信息列表'
 				},
 				// route level code-splitting
@@ -86,6 +109,7 @@ Vue.use(Router)
 				path: '/infoCategory',
 				name: 'InfoCategory',
 				meta:{
+					keepAlive:true,
 					name:'信息分类'
 				},
 				// route level code-splitting
@@ -98,6 +122,7 @@ Vue.use(Router)
 				name: 'EditDetail',
 				hidden:true,
 				meta:{
+					keepAlive:true,
 					name:'信息详情'
 				},
 				// route level code-splitting
@@ -115,6 +140,7 @@ Vue.use(Router)
 	  name: 'User',
 		hidden:true,
 		meta:{
+			system:'userSystem',
 			name:'用户管理',
 			icon:'icon-yonghuguanli'
 		},
@@ -135,12 +161,11 @@ Vue.use(Router)
 				component: () => import('../views/User/UserList.vue'),
 			}
 		]
-	}
-	
+	},
+	{path:'*',redirect:'/404'}
 ]
 
 const router = new Router({
-  routes
+  routes:defaultRoutes		
 })
-
 export default router

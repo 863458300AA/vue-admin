@@ -3,9 +3,9 @@ import { Message } from 'element-ui'
 import {getToken,getUsername} from '@/ulits/cookieSetting.js'
 //创建axios,赋值给serviceing
 
-//判断师生环境还是开发环境
-const BASEURL = process.env.NODE_ENV === 'production' ? '' : '/api';
-
+//判断时生产环境还是开发环境
+const BASEURL = process.env.NODE_ENV === 'production' ? process.env.VUE_APP_API : process.env.VUE_APP_API ;
+console.log(process.env)
 const service = axios.create({
 	baseURL:BASEURL, //进行了这些操作之后 http://localhost:8080/api => http://www.web-jshtml.cn/productApi
 	timeout:10000
@@ -38,7 +38,8 @@ service.interceptors.response.use((res)=>{
 		})
 		return Promise.reject(data)
 	}else{
-		if(data.message !== 'OK') Message.success(data.message);
+		var reg = /OK|获取成功/
+		if(!reg.test(data.message)) Message.success(data.message);
 		return res;
 	}
 })

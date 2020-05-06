@@ -1,9 +1,9 @@
 import {Login} from '../../api/login.js'
-import {setToken,setUserName,getUsername} from '../../ulits/cookieSetting.js'
+import {setToken,setUserName,getUsername,getToken} from '../../ulits/cookieSetting.js'
 
 const state = {
 	isCollapse:JSON.parse(sessionStorage.getItem('isCollapse')) || false,
-	token:'',
+	token:getToken() || '',
 	username:getUsername() || ''
 };
 const getters = {

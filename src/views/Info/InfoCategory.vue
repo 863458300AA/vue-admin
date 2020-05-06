@@ -1,13 +1,14 @@
 <template>
 	<div id="infoCategory">
-		<el-button @click="openParent" type="danger">添加一级分类</el-button>
+		<el-button @click="openParent" type="danger" v-if="btnPremi('info.firstCategoryAdd')">添加一级分类</el-button>
 		<div style="background-color:#e9e9e9;margin:30px 0 30px -30px;height:1px;width:calc(100% + 60px);"></div>
 		<el-row :gutter="30">
 			<el-col :span="8" class="category">
-				<div v-for="(item,index) of category" :key="item.id">
+				<div v-for="(item,index) of category" :key="item.id" :ref="item.category_name">
 					<h4 class="flexBetween">
 						<div>
-							<i class="iconfont icon-jiahao"></i><span v-text="item.category_name"></span>
+							<!-- :class="{'icon-jianhao':iconIndex == index}" data-index="index"-->
+							<i @click="openChild(item.category_name)" class="iconfont icon-jiahao"></i><span v-text="item.category_name"></span>
 						</div>
 						<div class="btnGroup">
 							<el-button round size="mini" type="danger" @click="editCategory(item)">编辑</el-button>
@@ -15,8 +16,8 @@
 							<el-button round size="mini" @click="delParent(item.id)">删除</el-button>
 						</div>
 					</h4>
-					<ul >
-						<li class="flexBetween" v-for="elem of item.children">
+					<ul>
+						<li style="display: none;" class="flexBetween" v-for="elem of item.children">
 							{{elem.category_name}}
 							<div class="btnGroup">
 								<el-button round size="mini" type="danger" @click="editChild(item,elem)">编辑</el-button>
@@ -60,6 +61,17 @@
       }
 		},
 		methods:{
+			//展开分类
+			openChild(data){
+				let div = this.$refs[data][0];
+			  let icon = div.querySelector('.iconfont')
+				let li = div.querySelectorAll('ul .flexBetween')
+				console.log(li)
+				icon.className = icon.className === 'iconfont icon-jiahao'? 'iconfont icon-jianhao':'iconfont icon-jiahao';
+				li.forEach(item=>{
+					item.style.display = item.style.display === ''? 'none':'';
+				})
+			},
 			//添加一级分类
 			openParent(){
 				this.parentDisabled = false;
@@ -159,11 +171,10 @@
 					}
 				}
 			},
-			
 			// 调用获取分类接口
 			axiosGetCategory(){
 				infoCategory().then(res=>{
-					this.category = res.data.data;	
+					this.category = res.data.data;
 				}).catch(err=>{
 					console.log(err);
 				})
@@ -225,6 +236,11 @@
 				this.form[Category] = '';
 			},
 		},
+		computed:{
+			icon(){
+				 return this.showChild? ' icon-jianhao':' icon-jiahao'
+			}
+		},
 		created() {
 			infoCategory().then(res=>{
 				this.category = res.data.data
@@ -245,22 +261,23 @@
 				content: '';
 				display: block;
 				position: absolute;
-				top: -15px;
-				left: 18px;
+				top:-15px;
+				left: 19px;
 				height:calc(100% + 29px);
 				border-left: 1px dashed #000;
 			}
 		}
 		>div:last-child ul{
-			&:before{
-				height:calc(100% - 6px);
-			}
+				&:before{
+					height:calc(100% - 6px);
+				}
 		}
 		h4{
 			font-weight: 700;
 			i{
 				padding:0 12px 0 13px;
 				font-size: 14px;
+				cursor: pointer;
 			}
 		}
 		li{

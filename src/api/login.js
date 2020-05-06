@@ -28,4 +28,12 @@ export function Login(data){
 				})
 }
 
+//退出登录
+export function LogOut(data){
+	return service.request({
+					method:'post',
+					url:'	/logout/',
+					data
+				})
+}
 

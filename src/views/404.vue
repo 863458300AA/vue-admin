@@ -1,9 +1,10 @@
 <template>
-	<div>暂未开发</div>
+	<h2>404</h2>
 </template>
 
 <script>
 </script>
 
-<style>
+<style lang="scss" scoped>
+	
 </style>

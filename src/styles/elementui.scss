@@ -1,4 +1,7 @@
 @import "./config.scss";
+.el-menu{
+	border-right: 0;
+}
 .el-submenu .el-menu-item{
 	padding-left: 50px !important;
 	font-size: 14px !important;
@@ -137,3 +140,18 @@
 		    display: block;
 		  }
 	}
+/* 用户列表弹出框 样式*/
+.useDialog{
+	.el-select{
+		.el-input__inner{
+		width: 100%;
+		}
+	}
+	.el-dialog__body .el-form-item .el-form-item__label{
+		text-align: right;
+	}
+}
+/* table样式 */
+.el-table__header{
+	width: 1549px !important;
+}

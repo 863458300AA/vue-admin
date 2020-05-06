@@ -3,7 +3,7 @@
 		<div class="img" :class="{close:isCollapse}">
 			<img src="../../../assets/vue_03.png" alt="">
 		</div>
-		<el-menu default-active="1-4-1" class="el-menu-vertical-demo" 
+		<el-menu :default-active="defaultActive" class="el-menu-vertical-demo" 
 		:collapse="isCollapse"
 	  background-color="transparent" router
 		text-color="#fff" active-text-color="#fff">
@@ -27,12 +27,15 @@
 		name:'navMenu',
 		data(){
 			return{
-				routers:[],
+				routers:[]
 			}
 		},
 		computed:{
 			isCollapse(){
 				return this.$store.state.app.isCollapse
+			},
+			defaultActive(){
+				return this.$route.path
 			}
 		},
 		methods:{
@@ -40,6 +43,7 @@
 		},
 		mounted(){
 			this.routers = this.$router.options.routes;
+			console.log(this.routers)
 		}
 }
 </script>
@@ -48,7 +52,7 @@
 	@import '../../../styles/config.scss';
 	#nav_wrap{
 		height: 100vh;
-		// width: 250px;
+		//width: 250px;
 		background-color: #344a5f;
 	}
 	.img{

@@ -14,11 +14,32 @@ router.beforeEach((to,from,next)=>{
 			//清除vuex的值
 			store.commit('app/SET_TOKEN','');
 			store.commit('app/SET_USERNAME','');
+			store.commit('getRole/CLEARROLES');
 			next()
 		}else{
-			next()
+			//获取用户的角色
+			//动态分配路由权限
+			// 1.什么时候处理静态路由
+			// 2.以什么条件处理
+			if(!store.getters['getRole/roles'].length){
+				store.dispatch('getRole/axiosGetRole').then(res=>{
+					let role = res.role; /* 获取用户的角色值 */
+					let button = res.button /* 获取用户的按钮权限 */
+					store.dispatch('getRole/createRouter',role).then(res=>{
+						let addRouters = store.getters['getRole/addRouters'];
+						let allRouters = store.getters['getRole/allRouters'];
+						//路由更新
+						router.options.routes = allRouters;
+						console.log(router.options.routes)
+						//添加动态路由
+						router.addRoutes(addRouters)
+						next({...to,replace:true})
+					})
+				});
+			}else{
+		 	 	next()
+		 	}
 		}
-		//路透动态添加,分配菜单,每个角色分配不同的菜单
 	}else{
 		if(to.path === '/login'){
 			next()
